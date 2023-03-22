@@ -1,0 +1,2 @@
+exp_id = mlflow.get_experiment_by_name('<mlflow_exp_name>').experiment_id
+print("Extracting Experiment ID: ", exp_id)
