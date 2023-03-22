@@ -60,7 +60,8 @@ ENV JAVA_OPTS "-Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
 RUN printf 'Acquire::http::Proxy "<proxy>";\n Acquire::https::Proxy "<proxy>";\n' >> /etc/apt/apt.conf
 
 # Create USER
-RUN useradd -ms /bin/bash laiml
+RUN useradd -ms /bin/bash <user>
+# Set Password
 RUN echo '<user>:<pass>' | chpasswd
 
 # Update Ubuntu Software repository
@@ -79,6 +80,7 @@ RUN apt-get install git
 RUN apt-get install net-tools
 RUN apt-get install -y openssh-server 
 RUN apt-get install -y vim 
+RUN apt-get install -y curl
 RUN apt install sudo 
 
 # Set the workspace directory
