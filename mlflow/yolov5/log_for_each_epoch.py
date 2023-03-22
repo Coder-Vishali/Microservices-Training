@@ -1,0 +1,8 @@
+mlflow.log_metric("train_P", results[0], step=epoch)
+mlflow.log_metric("train_R", results[1], step=epoch)
+mlflow.log_metric("train_mAP.5", results[2], step=epoch)
+mlflow.log_metric("train_mAP.5-.95", results[3], step=epoch)
+mloss_cpu = mloss.cpu().numpy()
+mlflow.log_metric("box", mloss_cpu[0], step=epoch)
+mlflow.log_metric("obj", mloss_cpu[1], step=epoch)
+mlflow.log_metric("cls", mloss_cpu[2], step=epoch)
