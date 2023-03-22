@@ -1,0 +1,46 @@
+# Import basic Ubuntu Image
+FROM ubuntu:18.04
+
+ENV DEBIAN_FRONTEND noninteractive
+
+# Define the proxies
+ENV HTTP_PROXY "<proxy>"
+ENV HTTPS_PROXY "<proxy>"
+
+# Define other environment variables
+ENV APT_KEY_DONT_WARN_ON_DANGEROUS_USAGE=1
+ENV JAVA_OPTS "-Djava.awt.headless=true -Dhudson.plugins.git.GitSCM.ALLOW_LOCAL_CHECKOUT=true"
+
+USER root
+
+RUN printf 'Acquire::http::Proxy "<proxy>";\n Acquire::https::Proxy "<proxy>";\n' >> /etc/apt/apt.conf
+
+# Updating and upgrading Ubuntu
+RUN apt-get -y update \
+&& apt-get -y upgrade
+
+# Installing basic Ubuntu packages and utilities
+RUN apt-get -y install software-properties-common git gnupg sudo nano vim wget curl zip unzip build-essential libtool autoconf uuid-dev pkg-config libsodium-dev lynx-common tcl inetutils-ping net-tools ssh openssh-server openssh-client openssl letsencrypt apt-transport-https telnet locales gdebi lsb-release
+RUN apt-get install ca-certificates
+
+# Clear cache
+RUN apt-get clean
+
+# Jenkins Prerequisites
+RUN apt search openjdk
+RUN apt-get -y install openjdk-11-jdk
+
+# Download & add repository key
+RUN wget -q -O - https://pkg.jenkins.io/debian-stable/jenkins.io.key | apt-key add -
+# Getting binary file into /etc/apt/sources.list.d
+RUN sh -c 'echo deb https://pkg.jenkins.io/debian-stable binary/ > /etc/apt/sources.list.d/jenkins.list'
+# Updating packages
+RUN apt-get update
+# Installing Jenkins
+RUN apt-get -y install jenkins
+
+# Start Jenkins
+RUN service jenkins start
+
+# Expose port that is used by Jenkins
+EXPOSE 8080
