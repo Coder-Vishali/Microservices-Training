@@ -1,0 +1,10 @@
+# Loading the model
+# model = mlflow.pytorch.load_model(model_uri=f"./mlruns/1/{run.info.run_id}/artifacts/model")
+
+run = mlflow.active_run()
+print(f"Current Run ID:\t{run.info.run_id}")
+print("This information is used to define the model URI")
+model_uri = "runs:/{}/model".format(run.info.run_id)
+
+#loaded_model = mlflow.pytorch.load_model(model_uri)
+#print(f"Model loaded successfully: {loaded_model}")
